@@ -11,14 +11,15 @@ public class MinimalFxChart extends Region {
     public MinimalFxChart(double values[]) {
         widthProperty().addListener(o -> paint());
         heightProperty().addListener(o -> paint());
+        canvas = new Canvas();
+        getChildren().add(canvas);
     }
 
     private void paint() {
-        canvas = new Canvas(getWidth(),getHeight());
-        getChildren().clear();
-        getChildren().add(canvas);
+        canvas.setWidth(getWidth());
+        canvas.setHeight(getHeight());
         var gc = canvas.getGraphicsContext2D();
-        System.out.println(canvas.getWidth());
+        gc.clearRect(0,0,getWidth(),getHeight());
         gc.setStroke(Color.RED);
         gc.beginPath();
         gc.moveTo(0,0);
