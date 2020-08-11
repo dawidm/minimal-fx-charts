@@ -64,9 +64,7 @@ public class MinimalFxChart extends Region {
         double valuesMin = Arrays.stream(values).min().getAsDouble();
         double valuesMax = Arrays.stream(values).max().getAsDouble();
         double minMax = Math.abs(valuesMin-valuesMax);
-        if (valuesMin<0) {
-            values = Arrays.stream(values).map(v -> v-valuesMin).toArray();
-        }
+        values = Arrays.stream(values).map(v -> v-valuesMin).toArray();
         for(int i=0; i<values.length; i++) {
             values[i] = values[i]*height/minMax;
         }
