@@ -68,7 +68,6 @@ public class MinimalFxChart extends Region {
         gc.setStroke(chartPaint);
         gc.setEffect(chartEffect);
         gc.clearRect(0,0,getWidth(),getHeight());
-        gc.setStroke(Color.RED);
         gc.beginPath();
         gc.moveTo(arguments[0],getHeight()-values[0]);
         for(int i=1; i<arguments.length;i++)
