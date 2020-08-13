@@ -4,13 +4,17 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import javafx.scene.canvas.Canvas;
+import javafx.scene.effect.Effect;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 
 public class MinimalFxChart extends Region {
 
-    private Canvas canvas;
-    private double[] values;
+    private final Canvas canvas;
+    private final double[] values;
+    private Paint chartPaint = Color.RED;
+    private Effect chartEffect = null;
     private double marginsHorizontalPercent = 0;
     private double marginsVerticalPercent = 0;
 
@@ -30,6 +34,30 @@ public class MinimalFxChart extends Region {
         this.marginsVerticalPercent = marginsVerticalPercent;
     }
 
+    public void setChartPaint(Paint chartPaint) {
+        this.chartPaint = chartPaint;
+    }
+
+    public void setChartEffect(Effect chartEffect) {
+        this.chartEffect = chartEffect;
+    }
+
+    public Paint getChartPaint() {
+        return chartPaint;
+    }
+
+    public Effect getChartEffect() {
+        return chartEffect;
+    }
+
+    public double getMarginsHorizontalPercent() {
+        return marginsHorizontalPercent;
+    }
+
+    public double getMarginsVerticalPercent() {
+        return marginsVerticalPercent;
+    }
+
     private void paint() {
         canvas.setWidth(getWidth());
         canvas.setHeight(getHeight());
@@ -37,6 +65,8 @@ public class MinimalFxChart extends Region {
         double[] arguments = rescaledValues[0];
         double[] values = rescaledValues[1];
         var gc = canvas.getGraphicsContext2D();
+        gc.setStroke(chartPaint);
+        gc.setEffect(chartEffect);
         gc.clearRect(0,0,getWidth(),getHeight());
         gc.setStroke(Color.RED);
         gc.beginPath();
