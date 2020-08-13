@@ -11,13 +11,23 @@ public class MinimalFxChart extends Region {
 
     private Canvas canvas;
     private double[] values;
+    private double marginsHorizontalPercent = 0;
+    private double marginsVerticalPercent = 0;
 
     public MinimalFxChart(double values[]) {
-        this.values = new double[] {1, 5, 10, 7, 10, 1, 6, 3, 2, 3, 4,1,6,9,8,5,4,1,2};
+        this.values = values;
         widthProperty().addListener(o -> paint());
         heightProperty().addListener(o -> paint());
         canvas = new Canvas();
         getChildren().add(canvas);
+    }
+
+    public void setMarginsHorizontalPercent(double marginsHorizontalPercent) {
+        this.marginsHorizontalPercent = marginsHorizontalPercent;
+    }
+
+    public void setMarginsVerticalPercent(double marginsVerticalPercent) {
+        this.marginsVerticalPercent = marginsVerticalPercent;
     }
 
     private void paint() {
@@ -37,36 +47,40 @@ public class MinimalFxChart extends Region {
     }
 
     private double[][] rescaleValues(double[] values, double width, double height) {
-        double oldToNewRatio = (double) values.length / width;
+        width -= 2*marginsHorizontalPercent*width;
+        height -= 2*marginsVerticalPercent*height;
+        int marginHorizontalPx = (int)(marginsHorizontalPercent*width);
+        int marginVerticalPx = (int)(marginsVerticalPercent*height);
+        double oldToNewRatio = (values.length-1) / width;
         double[] arguments;
         if (values.length>width) {
             var valuesNew = new double[(int) width];
             arguments = new double[(int)width];
             for (int i = 0; i < valuesNew.length; i++) {
                 valuesNew[i] = values[(int) (i * oldToNewRatio)];
-                arguments[i] = i;
+                arguments[i] = i + marginHorizontalPx;
             }
             values = valuesNew;
         } else if (values.length<width) {
             var argsList = new ArrayList<Double>();
             var valList = new ArrayList<Double>();
-            for(int i=0; i< values.length; i++) {
+            for(int i=0; i < values.length; i++) {
                 valList.add(values[i]);
-                argsList.add(i*1/oldToNewRatio);
+                argsList.add(i/oldToNewRatio + marginHorizontalPx);
             }
             arguments = argsList.stream().mapToDouble(a -> a).toArray();
             values = valList.stream().mapToDouble(v -> v).toArray();
         } else {
             arguments = new double[(int)width];
             for (int i = 0; i < arguments.length; i++)
-                arguments[i] = i;
+                arguments[i] = i + marginHorizontalPx;
         }
         double valuesMin = Arrays.stream(values).min().getAsDouble();
         double valuesMax = Arrays.stream(values).max().getAsDouble();
         double minMax = Math.abs(valuesMin-valuesMax);
         values = Arrays.stream(values).map(v -> v-valuesMin).toArray();
         for(int i=0; i<values.length; i++) {
-            values[i] = values[i]*height/minMax;
+            values[i] = values[i]*height/minMax + marginVerticalPx;
         }
         return new double[][] {arguments, values};
     }
