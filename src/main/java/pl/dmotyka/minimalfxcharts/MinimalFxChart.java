@@ -25,7 +25,7 @@ import javafx.scene.paint.Paint;
 public class MinimalFxChart extends Region {
 
     private final Canvas canvas;
-    private final double[] values;
+    private double[] values;
     private Paint chartPaint = Color.RED;
     private Effect chartEffect = null;
     private double marginsHorizontalPercent = 0;
@@ -37,6 +37,11 @@ public class MinimalFxChart extends Region {
         heightProperty().addListener(o -> paint());
         canvas = new Canvas();
         getChildren().add(canvas);
+    }
+
+    public void repaint(double[] values) {
+        this.values = values;
+        paint();
     }
 
     public void setMarginsHorizontalPercent(double marginsHorizontalPercent) {
@@ -78,6 +83,7 @@ public class MinimalFxChart extends Region {
         double[] arguments = rescaledValues[0];
         double[] values = rescaledValues[1];
         var gc = canvas.getGraphicsContext2D();
+
         gc.setStroke(chartPaint);
         gc.setEffect(chartEffect);
         gc.clearRect(0,0,getWidth(),getHeight());
