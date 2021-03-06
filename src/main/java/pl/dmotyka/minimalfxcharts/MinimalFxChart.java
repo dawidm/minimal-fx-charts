@@ -32,6 +32,8 @@ public class MinimalFxChart extends Region {
     private double marginsVerticalPercent = 0;
 
     public MinimalFxChart(double[] values) {
+        if (values == null || values.length < 2)
+            throw new IllegalArgumentException("please provide at least 2 values");
         this.values = values;
         widthProperty().addListener(o -> paint());
         heightProperty().addListener(o -> paint());
@@ -40,6 +42,8 @@ public class MinimalFxChart extends Region {
     }
 
     public void repaint(double[] values) {
+        if (values == null || values.length < 2)
+            throw new IllegalArgumentException("please provide at least 2 values");
         this.values = values;
         paint();
     }
